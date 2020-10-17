@@ -1,0 +1,5 @@
+data/
+result/
+final_result/
+temp/
+sftp-config.json

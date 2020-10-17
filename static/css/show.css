@@ -1,0 +1,43 @@
+.container {
+	width: 100%;
+	height: 100%;
+	background-color: antiquewhite;
+}
+
+.box {
+	float: left;
+	width: 25%;
+	height: 350px;
+	border: 1px solid antiquewhite;
+	box-sizing: border-box;
+	background-color: lightgrey;
+	padding: 5px;
+}
+
+img {
+	width: 100%;
+	height: 290px;
+}
+
+input {
+	width: 74%;
+	margin: auto;
+}
+
+button {
+	width: 65px;
+	height: 20px;
+	margin: 2px 0px;
+}
+
+.next {
+	position: fixed;
+	right: 100px;
+	bottom: 10px;
+}
+
+.save {
+	position: fixed;
+	right: 20px;
+	bottom: 10px;
+}

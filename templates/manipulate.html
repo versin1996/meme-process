@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh">
+    <title>人工处理</title>
+    <script src="static/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("button").click(function() {
+                if(this.value == "next"){
+                    window.location.reload();
+                }
+                else if(this.value == "prev") {
+                    $.post("/prev", {},
+                        function(data, status) {  
+                            if(data.CODE == 200) {
+                                window.location.reload();  
+                            }
+                            else {
+                                alert("已在首页");
+                            }
+                    }) 
+                }
+                else if(this.value == "submit") {
+                    $.post("/save", {},
+                        function(data, status) {  
+                            if(data.CODE == 200) {
+                                window.location.reload();  
+                            }
+                            else {
+                                alert("未处理完毕");
+                                alert(data.UNFINISHED);
+                            }
+                    }) 
+                }
+                else {
+                    var flag;
+                    var content;
+                    var fileName = this.parentNode.parentNode.parentNode.parentNode.getAttribute("fileName");
+                    var btns = $("button." + fileName);
+                    for(var i=0; i < btns.length; i++)
+                    {
+                        btns[i].disabled = false;
+                    }
+                    this.disabled = true;
+                    console.log('saF')
+                    if (Number(this.value)){
+                        var selector = "#" + "content" + this.value + "_" + fileName;
+                        flag = "meme";
+                        content = $(selector).val();
+                    }
+                    else {
+                        flag = this.value;
+                        content = "";
+                    }
+                    $.post("/getContent", {"fileName": fileName, "content": content, "flag": flag},
+                        function (data, status) {
+                    })
+                }
+            })
+        })
+    </script>
+</head>
+
+<body>
+    {% for fileName, text in data.items() %}
+        <div style="float: left">
+            <table frame="box" fileName="{{fileName}}" style="width: 1200px;">
+                <tr>
+                    <th rowspan="4">
+                         <img src="data:;base64,{{ imgs[loop.index-1] }}" alt="pic" height="235" width="500" id="{{fileName}}">
+                    </th>
+                    <th>
+                        <button class="{{fileName}}" value="1" style="width: 60px;">确认</button>
+                    </th>
+                    <th colspan="3">
+                        <input type="text" id="content1_{{fileName}}" style="width: 700px;" value={{text[0]}}>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th>
+                        <button class="{{fileName}}" value="2"  style="width: 60px;">确认</button>
+                    </th>
+                    <th colspan="3">
+                        <input type="text" id="content2_{{fileName}}" style="width: 700px;" value={{text[1]}}>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th>
+                        <button class="{{fileName}}" value="3"  style="width: 60px;">确认</button>
+                    </th>
+                    <th colspan="3">
+                        <input type="text" id="content3_{{fileName}}" style="width: 700px;" value={{text[2]}}>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th>
+                        <button class="{{fileName}}" value="AD" style="width: 60px;">AD</button>
+                    </th>
+                    <th>
+                        <button class="{{fileName}}" value="NoText" style="width: 60px;">No text</button>
+                    </th>
+                    <th>
+                        <button class="{{fileName}}" value="Other" style="width: 60px;">Other</button>
+                    </th>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+    <div style="position: fixed; margin-left: 1300px;">
+        <h2 >{{openFile}}</h2><br>
+        <h2 >{{cnt}}</h2><br>
+        <button value="submit" style="width: 60px;">提  交</button><br><br><br>
+        <button value="prev" style="width: 60px;">上一组</button><br><br><br>
+        <button value="next" style="width: 60px;">下一组</button>
+    </div>
+    <div id="test" flag={{submitFlag}}></div>
+</body>
+</html>
